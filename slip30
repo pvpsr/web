@@ -1,0 +1,70 @@
+Q. 1) Create a XML file which gives details of books available in “Bookstore” from following
+        categories.
+        1) Yoga
+        2) Story
+        3) Technical
+        and elements in each category are in the following format
+        <Book>
+        <Book_Title> --------------</Book_Title>
+        <Book_Author> ---------------</Book_Author>
+        <Book_Price> --------------</Book_Price>
+        </Book>
+        Save the file as “Bookcategory.xml”
+
+
+
+//book.php 
+
+<?php
+$xml = new SimpleXMLElement('<Bookstore/>');
+
+$categories = [
+    "Yoga" => ["Yoga for Beginners", "Ramdev", "299"],
+    "Story" => ["Panchatantra", "Vishnu Sharma", "199"],
+    "Technical" => ["Learning PHP", "David Sklar", "550"]
+];
+
+foreach ($categories as $name => $book) {
+    $category = $xml->addChild("Category");
+    $category->addAttribute("name", $name);
+    
+    $b = $category->addChild("Book");
+    $b->addChild("Book_Title", $book[0]);
+    $b->addChild("Book_Author", $book[1]);
+    $b->addChild("Book_Price", $book[2]);
+}
+
+$xml->asXML("Bookcategory.xml");
+echo "Bookcategory.xml created!";
+?>
+
+
+
+
+Q. 2 ) Create the dataset . transactions = [['eggs', 'milk','bread'], ['eggs', 'apple'], ['milk', 'bread'], ['apple', 
+    'milk'], ['milk', 'apple', 'bread']] . 
+    Convert the categorical values into numeric format.Apply the apriori algorithm on the above dataset to 
+    generate the frequent itemsets and association rules. 
+
+    
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+transactions = [
+    ['eggs', 'milk', 'bread'],
+    ['eggs', 'apple'],
+    ['milk', 'bread'],
+    ['apple', 'milk'],
+    ['milk', 'apple', 'bread']
+]
+
+te = TransactionEncoder()
+df = pd.DataFrame(te.fit_transform(transactions), columns=te.columns_)
+
+freq_items = apriori(df, min_support=0.4, use_colnames=True)
+rules = association_rules(freq_items, metric="lift", min_threshold=1)
+
+print("\nFrequent Itemsets:\n", freq_items)
+print("\nAssociation Rules:\n", rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])

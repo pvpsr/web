@@ -1,0 +1,58 @@
+Q. 1) Write a Java Script Program to validate user name and password on onSubmit event.
+
+// validate.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Validation</title>
+    <script>
+        function validateForm() {
+            let user = document.getElementById("username").value;
+            let pass = document.getElementById("password").value;
+
+            if (!user) return alert("Username required!"), false;
+            if (pass.length < 6) return alert("Password must be 6+ chars!"), false;
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <form onsubmit="return validateForm()">
+        <label>Username:</label>
+        <input type="text" id="username"><br><br>
+
+        <label>Password:</label>
+        <input type="password" id="password"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+
+
+
+Q. 2)Download the movie_review.csv dataset from Kaggle by using the following link 
+:https://www.kaggle.com/nltkdata/movie-review/version/3?select=movie_review.csv to perform 
+sentiment analysis on above dataset and create a wordcloud.
+
+
+import pandas as pd
+import re
+import nltk
+import matplotlib.pyplot as plt
+from nltk.sentiment import SentimentIntensityAnalyzer
+from wordcloud import WordCloud
+
+nltk.download('vader_lexicon')
+
+df = pd.read_csv("movie_review.csv")  
+
+sia = SentimentIntensityAnalyzer()
+df["sentiment"] = df["review"].apply(lambda x: sia.polarity_scores(str(x))["compound"])
+
+wordcloud = WordCloud().generate(" ".join(df["review"].astype(str)))
+plt.imshow(wordcloud, interpolation="bilinear")
+plt.axis("off")
+plt.show()

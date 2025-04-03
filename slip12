@@ -1,0 +1,81 @@
+Q. 1) Write AJAX program to read contact.dat file and print the contents of the file in a tabular format
+      when the user clicks on print button. Contact.dat file should contain srno, name, residence number,
+      mobile number, Address. [Enter at least 3 record in contact.dat file] 
+
+
+//ajax.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX Contact List</title>
+    <script>
+        function loadData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "contact.dat", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var lines = xhr.responseText.split("\n");
+                    var output = "<table border='1'><tr><th>Sr No</th><th>Name</th><th>Residence</th><th>Mobile</th><th>Address</th></tr>";
+                    for (var i = 0; i < lines.length; i++) {
+                        var cols = lines[i].split(",");
+                        output += "<tr><td>" + cols.join("</td><td>") + "</td></tr>";
+                    }
+                    output += "</table>";
+                    document.getElementById("result").innerHTML = output;
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <button onclick="loadData()">Print</button>
+    <div id="result"></div>
+</body>
+</html>
+
+
+
+//contact.dat
+
+1,John Doe,022-123456,9876543210,Mumbai
+2,Jane Smith,022-654321,8765432109,Delhi
+3,Alex Roy,022-789456,7654321098,Bangalore
+
+
+
+
+
+Q.2 Create ‘heights-and-weights’ Data set . Build a linear regression model by identifying independent 
+    and target variable. Split the variables into training and testing sets and print them. Build a simple linear 
+    regression model for predicting purchases. 
+
+
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    
+    data = {
+        'Height': [150, 160, 165, 170, 175, 180, 185, 190], 
+        'Weight': [50, 55, 60, 65, 70, 75, 80, 85] 
+    }
+    
+    df = pd.DataFrame(data)
+    
+    X = df[['Height']].values  # Height
+    Y = df['Weight'].values  # Weight
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+    
+    regressor = LinearRegression()
+    regressor.fit(X_train, y_train)
+    
+    print("X_train:\n", X_train)
+    print("y_train:\n", y_train)
+    print("X_test:\n", X_test)
+    print("y_test:\n", y_test)
+    print("Coefficients:", regressor.coef_)
+    print("Intercept:", regressor.intercept_)
+    

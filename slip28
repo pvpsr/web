@@ -1,0 +1,36 @@
+Q. 1) Write a PHP script using AJAX concept, to check user name and password are valid or Invalid (use
+    database to store user name and password).
+
+
+
+
+
+Q. 2 ) Build a simple linear regression model for Car Dataset.
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+data = {
+    'Car_Age': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],                                                   
+    'Car_Price': [500000, 450000, 400000, 350000, 300000, 250000, 200000, 150000, 100000, 50000]  
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Car_Age']].values  
+Y = df['Car_Price'].values  
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+print("X_train:\n", X_train)
+print("y_train:\n", y_train)
+print("X_test:\n", X_test)
+print("y_test:\n", y_test)
+
+print("Coefficients:", regressor.coef_)
+print("Intercept:", regressor.intercept_)

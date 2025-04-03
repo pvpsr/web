@@ -1,0 +1,72 @@
+Q. 1) Write a script to create “cricket.xml” file with multiple elements as shown below:
+        <CricketTeam>
+        <Team country=”Australia”>
+        <player>____</player>
+        <runs>______</runs>
+        <wicket>____</wicket>
+        </Team>
+        </CricketTeam>
+        Write a script to add multiple elements in “cricket.xml” file of category, country=”India”.
+
+
+
+//create.php
+
+<?php
+$xmlFile = 'cricket.xml';
+
+// Step 1: Create XML and add Australia Team if file does not exist
+if (!file_exists($xmlFile)) {
+    $xml = new SimpleXMLElement('<CricketTeam/>');
+
+    $team = $xml->addChild('Team');
+    $team->addAttribute('country', 'Australia');
+    $team->addChild('player', 'Steve Smith');
+    $team->addChild('runs', '5000');
+    $team->addChild('wicket', '2');
+
+    $xml->asXML($xmlFile);
+    echo "cricket.xml created successfully!<br>";
+} else {
+    $xml = simplexml_load_file($xmlFile);
+}
+
+// Step 2: Add Virat Kohli's record under India
+$team = $xml->addChild('Team');
+$team->addAttribute('country', 'India'); // Corrected here (addAttribute instead of setAttribute)
+$team->addChild('player', 'Virat Kohli');
+$team->addChild('runs', '12000');
+$team->addChild('wicket', '4');
+
+$xml->asXML($xmlFile);
+echo "Virat Kohli added successfully!";
+?>
+
+
+
+
+Q2
+
+import pandas as pd  
+import nltk  
+from nltk.tokenize import word_tokenize  
+from textblob import TextBlob  
+
+df = pd.read_csv("covid_2021_1.csv")  
+df = df.drop_duplicates().dropna()  
+
+df["tokenized_comments"] = df["comment"].apply(lambda x: word_tokenize(str(x)))  
+
+def get_sentiment(text):  
+    analysis = TextBlob(str(text)).sentiment.polarity  
+    return "Positive" if analysis > 0 else "Negative" if analysis < 0 else "Neutral"  
+
+df["sentiment"] = df["comment"].apply(get_sentiment)  
+
+positive = (df["sentiment"] == "Positive").sum() / len(df) * 100  
+negative = (df["sentiment"] == "Negative").sum() / len(df) * 100  
+neutral = (df["sentiment"] == "Neutral").sum() / len(df) * 100  
+
+print("Positive Comments:", positive, "%")  
+print("Negative Comments:", negative, "%")  
+print("Neutral Comments:", neutral, "%")  

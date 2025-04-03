@@ -1,0 +1,101 @@
+Q. 1) Write a PHP script to accept Employee details (Eno, Ename, Address) on first page. On second
+      page accept earning (Basic, DA, HRA). On third page print Employee information (Eno, Ename, Address,
+      Basic, DA, HRA, Total) [ Use Session]
+
+
+//main.php
+
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html>
+<head><title>Employee Details</title></head>
+<body>
+    <h1>Employee Details</h1>
+    <form method="POST" action="secondpage.php">
+        <input type="text" name="eno" placeholder="Employee No" required><br><br>
+        <input type="text" name="ename" placeholder="Employee Name" required><br><br>
+        <textarea name="address" placeholder="Address" required></textarea><br><br>
+        <input type="submit" value="Next">
+    </form>
+</body>
+</html>
+
+
+
+//secondpage.php
+
+<?php
+session_start();
+$_SESSION = array_merge($_SESSION, $_POST); // Store all input in session
+?>
+<!DOCTYPE html>
+<html>
+<head><title>Earnings</title></head>
+<body>
+    <h1>Earnings</h1>
+    <form method="POST" action="thirdpage.php">
+        <input type="text" name="basic" placeholder="Basic" required><br><br>
+        <input type="text" name="da" placeholder="DA" required><br><br>
+        <input type="text" name="hra" placeholder="HRA" required><br><br>
+        <input type="submit" value="Next">
+    </form>
+</body>
+</html>
+
+
+//thirdpage.php
+
+
+<?php
+session_start();
+$_SESSION = array_merge($_SESSION, $_POST); // Store earnings
+$total = $_SESSION['basic'] + $_SESSION['da'] + $_SESSION['hra'];
+?>
+<!DOCTYPE html>
+<html>
+<head><title>Employee Info</title></head>
+<body>
+    <h1>Employee Information</h1>
+    <p><strong>No:</strong> <?= $_SESSION['eno'] ?></p>
+    <p><strong>Name:</strong> <?= $_SESSION['ename'] ?></p>
+    <p><strong>Address:</strong> <?= $_SESSION['address'] ?></p>
+    <p><strong>Basic:</strong> <?= $_SESSION['basic'] ?></p>
+    <p><strong>DA:</strong> <?= $_SESSION['da'] ?></p>
+    <p><strong>HRA:</strong> <?= $_SESSION['hra'] ?></p>
+    <p><strong>Total Earnings:</strong> <?= $total ?></p>
+</body>
+</html>
+
+
+
+
+
+Q. 2)Build a simple linear regression model for Fish Species Weight Prediction.
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+data = {
+    'Species': ['Salmon', 'Tuna', 'Trout', 'Catfish', 'Bass', 'Mackerel'],
+    'Length': [30, 50, 40, 35, 45, 55],  # Independent Variable (in cm)
+    'Weight': [2.5, 6.0, 4.0, 3.2, 5.5, 7.0]  # Target Variable (in kg)
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Length']].values  
+Y = df['Weight'].values  
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+print("X_train:\n", X_train)
+print("y_train:\n", y_train)
+print("X_test:\n", X_test)
+print("y_test:\n", y_test)
+print("Coefficients:", regressor.coef_)
+print("Intercept:", regressor.intercept_)

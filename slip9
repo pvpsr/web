@@ -1,0 +1,61 @@
+Q. 1) Write a JavaScript function to validate username and password for a membership form
+
+//membership.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Membership Form</title>
+    <script>
+        function validateForm() {
+            let user = document.forms["form"]["username"].value;
+            let pass = document.forms["form"]["password"].value;
+            if (!user || !pass) {
+                alert("All fields are required!");
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <form name="form" onsubmit="return validateForm()">
+        <input type="text" name="username" placeholder="Username"><br><br>
+        <input type="password" name="password" placeholder="Password"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+
+
+
+
+
+Q. 2)Create your own transactions dataset and apply the above process on your dataset.
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+transactions = [
+    ['item1', 'item2', 'item3'],
+    ['item2', 'item3'],
+    ['item1', 'item2', 'item4'],
+    ['item1', 'item4'],
+    ['item2', 'item3', 'item4'],
+    ['item1', 'item3', 'item4'],
+    ['item1', 'item2'],
+    ['item1', 'item3'],
+    ['item3', 'item4'],
+    ['item2', 'item4']
+]
+
+te = TransactionEncoder()
+df_encoded = pd.DataFrame(te.fit_transform(transactions), columns=te.columns_)
+
+freq_items = apriori(df_encoded, min_support=0.3, use_colnames=True)
+rules = association_rules(freq_items, metric="confidence", min_threshold=0.7)
+
+print("\nFrequent Itemsets:\n", freq_items)
+print("\nAssociation Rules:\n", rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])
+

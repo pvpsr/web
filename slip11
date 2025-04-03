@@ -1,0 +1,70 @@
+Q. 1) Write a Javascript program to accept name of student, change font color to red, font size to 18 if
+      student name is present otherwise on clicking on empty text box display image which changes its size
+      (Use onblur, onload, onmousehover, onmouseclick, onmouseup)
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JavaScript Example</title>
+    <style>
+        #name { font-size: 14px; color: black; }
+        #img { display: none; width: 150px; }
+    </style>
+    <script>
+        function changeStyle() {
+            let name = document.getElementById("name");
+            if (name.value) name.style.cssText = "font-size:18px; color:red;";
+            else document.getElementById("img").style.display = "block";
+        }
+        function changeSize() { document.getElementById("name").style.fontSize = "16px"; }
+        function resetSize() { document.getElementById("name").style.fontSize = "14px"; }
+        function changeColor() { document.getElementById("name").style.color = "blue"; }
+        function resetColor() { document.getElementById("name").style.color = "red"; }
+        function changeImageSize() {
+            let img = document.getElementById("img");
+            img.style.width = "200px"; img.style.height = "200px"; img.style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <input type="text" id="name" placeholder="Enter Name" 
+           onblur="changeStyle()" onmouseover="changeSize()" onmouseout="resetSize()" 
+           onmousedown="changeColor()" onmouseup="resetColor()">
+    <br><br>
+    <img id="img" src="https://via.placeholder.com/150" onload="changeImageSize()">
+</body>
+</html>
+
+
+
+
+Q. 2)Create the following dataset in python & Convert the categorical values into numeric format.Apply 
+    the apriori algorithm on the above dataset to generate the frequent itemsets and associationrules. Repeat 
+    the process with different min_sup values.  
+
+ 
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+transactions = [
+    ['butter', 'bread', 'milk'],
+    ['butter', 'flour', 'milk', 'sugar'],
+    ['butter', 'eggs', 'milk', 'salt'],
+    ['eggs'],
+    ['butter', 'flour', 'milk', 'salt']
+]
+
+te = TransactionEncoder()
+df = pd.DataFrame(te.fit_transform(transactions), columns=te.columns_)
+
+min_sup_values = [0.2, 0.4, 0.6]
+
+for min_sup in min_sup_values:
+    print(f"\nMin Support: {min_sup}")
+    freq_items = apriori(df, min_support=min_sup, use_colnames=True)
+    rules = association_rules(freq_items, metric="lift", min_threshold=1)
+    
+    print("\nFrequent Itemsets:\n", freq_items)
+    print("\nAssociation Rules:\n", rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])

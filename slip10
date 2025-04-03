@@ -1,0 +1,59 @@
+Q. 1) Create a HTML fileto insert text before and after a Paragraph using jQuery. 
+      [Hint : Use before( ) and after( )]
+
+
+//beforeafter.html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>jQuery Before & After</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <p>This is a paragraph.</p>
+
+    <script>
+        $(document).ready(function () {
+            $("p").before("Before Text - ");
+            $("p").after(" - After Text");
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+Q. 2)Create the following dataset in python & Convert the categorical values into numeric format.Apply 
+    the apriori algorithm on the above dataset to generate the frequent itemsets and association rules. Repeat 
+    the process with different min_sup values. 
+
+
+    import pandas as pd
+    from mlxtend.preprocessing import TransactionEncoder
+    from mlxtend.frequent_patterns import apriori, association_rules
+    
+    transactions = [
+        ['eggs', 'milk', 'bread'],
+        ['eggs', 'apple'],
+        ['milk', 'bread'],
+        ['apple', 'milk'],
+        ['milk', 'apple', 'bread']
+    ]
+    
+    te = TransactionEncoder()
+    df = pd.DataFrame(te.fit_transform(transactions), columns=te.columns_)
+    
+    min_sup_values = [0.2, 0.4, 0.6]
+    
+    for min_sup in min_sup_values:
+        print(f"\nMin Support: {min_sup}")
+        freq_items = apriori(df, min_support=min_sup, use_colnames=True)
+        rules = association_rules(freq_items, metric="lift", min_threshold=1)
+        
+        print("\nFrequent Itemsets:\n", freq_items)
+        print("\nAssociation Rules:\n", rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])
+    

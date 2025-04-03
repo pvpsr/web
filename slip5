@@ -1,0 +1,76 @@
+Q. 1) Create XML file named “Item.xml” with item-name, item-rate, item-quantity 
+      Store the details of 5 Items of different Types
+
+//item.xml
+
+<link href="style.css">
+<items>
+    <item>
+        <name>Notebook</name>
+        <rate>50</rate>
+        <quantity>10</quantity>
+    </item>
+    <item>
+        <name>Pen</name>
+        <rate>20</rate>
+        <quantity>30</quantity>
+    </item>
+    <item>
+        <name>Mouse</name>
+        <rate>500</rate>
+        <quantity>5</quantity>
+    </item>
+    <item>
+        <name>Keyboard</name>
+        <rate>1000</rate>
+        <quantity>2</quantity>
+    </item>
+    <item>
+        <name>USB Drive</name>
+        <rate>800</rate>
+        <quantity>7</quantity>
+    </item>
+</items>
+
+
+//style.css
+
+.items{
+    color: black;
+}
+
+
+
+
+Q. 2)Use the iris dataset. Write a Python program to view some basic statistical details like percentile, 
+    mean, std etc. of the species of 'Iris-setosa', 'Iris-versicolor' and 'Iris-virginica'. Apply logistic regression 
+    on the dataset to identify different species (setosa, versicolor, verginica) of Iris flowers given just 4 
+    features: sepal and petal lengths and widths.. Find the accuracy of the model.
+
+
+import pandas as pd
+import numpy as np
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+iris = datasets.load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+df['species'] = iris.target
+
+print("\nStatistical Summary of Each Species:\n")
+print(df.groupby('species').describe())
+
+X = iris.data  
+y = iris.target  
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+lr = LogisticRegression(max_iter=200)
+lr.fit(X_train, y_train)
+
+y_pred = lr.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+print("\nModel Accuracy:", accuracy)

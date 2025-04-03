@@ -1,0 +1,85 @@
+Q. 1) Write a PHP script to read “Movie.xml” file and print all MovieTitle and ActorName of file using
+      DOMDocument Parser. “Movie.xml” file should contain following information with at least 5 records
+      with values. MovieInfoMovieNo, MovieTitle, ActorName ,ReleaseYear
+
+
+//read_movie.php
+
+<?php
+$doc = new DOMDocument();
+$doc->load("movie.xml");
+
+foreach ($doc->getElementsByTagName("movie") as $m) {
+    echo "Movie No: " . $m->getElementsByTagName("MovieNo")[0]->nodeValue;
+    echo " | Title: " . $m->getElementsByTagName("MovieTitle")[0]->nodeValue;
+    echo " | Actor: " . $m->getElementsByTagName("ActorName")[0]->nodeValue;
+    echo " | Year: " . $m->getElementsByTagName("ReleaseYear")[0]->nodeValue . "<br>";
+}
+?>
+
+
+//movie.xml 
+
+
+<movies>
+    <movie>
+        <MovieNo>1</MovieNo>
+        <MovieTitle>Inception</MovieTitle>
+        <ActorName>Leonardo DiCaprio</ActorName>
+        <ReleaseYear>2010</ReleaseYear>
+    </movie>
+    <movie>
+        <MovieNo>2</MovieNo>
+        <MovieTitle>Iron Man</MovieTitle>
+        <ActorName>Robert Downey Jr.</ActorName>
+        <ReleaseYear>2008</ReleaseYear>
+    </movie>
+    <movie>
+        <MovieNo>3</MovieNo>
+        <MovieTitle>Titanic</MovieTitle>
+        <ActorName>Leonardo DiCaprio</ActorName>
+        <ReleaseYear>1997</ReleaseYear>
+    </movie>
+    <movie>
+        <MovieNo>4</MovieNo>
+        <MovieTitle>The Dark Knight</MovieTitle>
+        <ActorName>Christian Bale</ActorName>
+        <ReleaseYear>2008</ReleaseYear>
+    </movie>
+    <movie>
+        <MovieNo>5</MovieNo>
+        <MovieTitle>Avatar</MovieTitle>
+        <ActorName>Sam Worthington</ActorName>
+        <ReleaseYear>2009</ReleaseYear>
+    </movie>
+</movies>
+
+
+
+
+Q. 2)Download the Market basket dataset. Write a python program to read the dataset and display its 
+    information. Preprocess the data (drop null values etc.) Convert the categorical values into numeric 
+    format. Apply the apriori algorithm on the above dataset to generate the frequent itemsets and association 
+    rules.  
+
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+df = pd.read_csv("market_basket.csv")
+print("\nDataset Information:")
+print(df.info())
+
+df.dropna(inplace=True)
+transactions = df.groupby('TransactionID')['Item'].apply(list).tolist()
+
+te = TransactionEncoder()
+df_encoded = pd.DataFrame(te.fit_transform(transactions), columns=te.columns_)
+
+freq_items = apriori(df_encoded, min_support=0.02, use_colnames=True)
+rules = association_rules(freq_items, metric="lift", min_threshold=1)
+
+print("\nFrequent Itemsets:\n", freq_items)
+print("\nAssociation Rules:\n", rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])

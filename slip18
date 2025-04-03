@@ -1,0 +1,63 @@
+Q. 1) Write a Java Script Program to print Fibonacci numbers on onclick event.
+
+
+//fibo.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fibonacci</title>
+    <script>
+        function fibonacci() {
+            let a = 0, b = 1, output = "0 1 ";
+            for (let i = 2; i < 10; i++) {
+                let c = a + b;
+                output += c + " ";
+                a = b;
+                b = c;
+            }
+            alert(output);
+        }
+    </script>
+</head>
+<body>
+    <button onclick="fibonacci()">Show Fibonacci</button>
+</body>
+</html>
+
+
+
+
+Q. 2)Consider any text paragraph. Remove the stopwords. Tokenize the paragraph to extract words and 
+    sentences. Calculate the word frequency distribution and plot the frequencies. Plot the wordcloud of the 
+    text.
+
+
+import nltk
+import re
+import matplotlib.pyplot as plt
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from collections import Counter
+from wordcloud import WordCloud
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+text = "Success is not final, failure is not fatal. It is the courage to continue that counts."
+
+text = re.sub(r'[^a-zA-Z\s]', '', text.lower())  
+words = word_tokenize(text)
+filtered_words = [w for w in words if w not in stopwords.words("english")]
+
+word_freq = Counter(filtered_words)
+
+plt.bar(word_freq.keys(), word_freq.values())
+plt.xticks(rotation=45)
+plt.show()
+
+wordcloud = WordCloud().generate(" ".join(filtered_words))
+plt.imshow(wordcloud, interpolation="bilinear")
+plt.axis("off")
+plt.show()
+

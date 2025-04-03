@@ -1,0 +1,54 @@
+Q. 1) Write a Java Script Program to show Hello Good Morning message onload event using alert box
+      and display the Student registration from.
+
+
+//onload.html
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration</title>
+    <script>
+        window.onload = function() {
+            alert("Hello, Good Morning!");
+        };
+    </script>
+</head>
+<body>
+    <h2>Student Registration Form</h2>
+    <form>
+        <input type="text" placeholder="Enter Name"><br><br>
+        <input type="email" placeholder="Enter Email"><br><br>
+        <input type="number" placeholder="Enter Age"><br><br>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
+
+
+
+
+Q. 2)Consider text paragraph.So, keep working. Keep striving. Never give up. Fall down seven times, get 
+    up eight. Ease is a greater threat to progress than hardship. Ease is a greater threat to progress than 
+    hardship. So, keep moving, keep growing, keep learning. See you at work.Preprocess the text to remove 
+    any special characters and digits. Generate the summary using extractive summarization process.
+
+
+import re
+import nltk
+from nltk.tokenize import sent_tokenize
+from collections import Counter
+
+nltk.download('punkt')
+
+text = """So, keep working. Keep striving. Never give up. Fall down seven times, get up eight. 
+Ease is a greater threat to progress than hardship. Ease is a greater threat to progress than hardship. 
+So, keep moving, keep growing, keep learning. See you at work."""
+
+text = re.sub(r'[^a-zA-Z\s]', '', text)  
+sentences = sent_tokenize(text)
+word_freq = Counter(text.lower().split())
+summary = sorted(sentences, key=lambda s: sum(word_freq[w] for w in s.lower().split()), reverse=True)[:2]
+
+print("Summary:", ' '.join(summary))
