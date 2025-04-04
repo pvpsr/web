@@ -1,6 +1,66 @@
 Q. 1) Create TEACHER table as follows TEACHER(tno, tname, qualification, salary). Write Ajax
       program to select a teachers name and print the selected teachers details 
 
+CREATE TABLE TEACHER (
+  tno SERIAL PRIMARY KEY,
+  tname VARCHAR(50),
+  qualification VARCHAR(50),
+  salary NUMERIC
+);
+
+INSERT INTO TEACHER (tname, qualification, salary) VALUES
+('Prof. Mehta', 'MCA', 45000),
+('Prof. Sharma', 'PhD', 60000),
+('Prof. Patil', 'MSc', 40000);
+
+
+
+//index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    function showDetails() {
+      var name = document.getElementById("tname").value;
+      if (name == "") return;
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        document.getElementById("result").innerHTML = this.responseText;
+      };
+      xhttp.open("GET", "get_teacher.php?tname=" + name, true);
+      xhttp.send();
+    }
+  </script>
+</head>
+<body>
+  <h3>Select Teacher:</h3>
+  <select id="tname" onchange="showDetails()">
+    <option value="">--Select--</option>
+    <option value="Prof. Mehta">Prof. Mehta</option>
+    <option value="Prof. Sharma">Prof. Sharma</option>
+    <option value="Prof. Patil">Prof. Patil</option>
+  </select>
+  <div id="result"></div>
+</body>
+</html>
+
+
+
+//get_teacher.php
+
+<?php
+$conn = pg_connect("host=localhost dbname=your_db user=your_user password=your_pass");
+$tname = $_GET['tname'];
+$tname = pg_escape_string($conn, $tname);
+$res = pg_query($conn, "SELECT * FROM TEACHER WHERE tname = '$tname'");
+if ($row = pg_fetch_assoc($res)) {
+  echo "TNo: $row[tno]<br>Name: $row[tname]<br>Qualification: $row[qualification]<br>Salary: ₹$row[salary]";
+} else {
+  echo "No data found.";
+}
+pg_close($conn);
+?>
 
 
 
