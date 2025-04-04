@@ -1,9 +1,56 @@
 Q. 1) Write Ajax program to get book details from XML file when user select a book name. Create XML
       file for storing details of book(title, author, year, price).
 
+//books.xml
+
+<books>
+  <book>
+    <title>Java</title>
+    <author>James</author>
+    <year>2000</year>
+    <price>500</price>
+  </book>
+  <book>
+    <title>PHP</title>
+    <author>Rasmus</author>
+    <year>2004</year>
+    <price>400</price>
+  </book>
+</books>
 
 
+//index.html
 
+<select onchange="getBook(this.value)">
+  <option value="">--Select--</option>
+  <option value="Java">Java</option>
+  <option value="PHP">PHP</option>
+</select>
+
+<div id="result"></div>
+
+<script>
+function getBook(bookName) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    const xml = this.responseXML;
+    const books = xml.getElementsByTagName("book");
+    for (let b of books) {
+      let title = b.getElementsByTagName("title")[0].textContent;
+      if (title == bookName) {
+        let author = b.getElementsByTagName("author")[0].textContent;
+        let year = b.getElementsByTagName("year")[0].textContent;
+        let price = b.getElementsByTagName("price")[0].textContent;
+        document.getElementById("result").innerHTML =
+          "Author: " + author + "<br>Year: " + year + "<br>Price: ₹" + price;
+        return;
+      }
+    }
+  };
+  xhttp.open("GET", "books.xml", true);
+  xhttp.send();
+}
+</script>
 
 
 
