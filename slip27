@@ -3,6 +3,60 @@ Q. 1) Create web Application that contains Voters details and check proper valid
       18 yrs and Nationality should be Indian.(use HTML-AJAX-PHP) 
 
 
+//index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Voter Validation</title>
+    <script>
+        function validateVoter() {
+            let name = document.getElementById("name").value;
+            let age = document.getElementById("age").value;
+            let nationality = document.getElementById("nationality").value;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "validate_voter.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function () {
+                document.getElementById("result").innerHTML = this.responseText;
+            };
+            xhr.send("name=" + name + "&age=" + age + "&nationality=" + nationality);
+        }
+    </script>
+</head>
+<body>
+    <h3>Voter Registration</h3>
+    Name: <input type="text" id="name"><br>
+    Age: <input type="number" id="age"><br>
+    Nationality: <input type="text" id="nationality"><br>
+    <button onclick="validateVoter()">Submit</button>
+    <div id="result"></div>
+</body>
+</html>
+
+
+
+//validate_voter.php
+
+<?php
+$name = $_POST['name'];
+$age = $_POST['age'];
+$nationality = $_POST['nationality'];
+
+if ($name !== strtoupper($name)) {
+    echo "Error: Name must be in UPPERCASE!";
+} elseif ($age < 18) {
+    echo "Error: Age must be 18 or above!";
+} elseif (strtolower($nationality) !== "indian") {
+    echo "Error: Nationality must be 'Indian'!";
+} else {
+    echo "Voter details are valid!";
+}
+?>
+
+
+
 
 Q.2
 
