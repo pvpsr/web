@@ -3,6 +3,69 @@ Q. 1) Write a PHP script using AJAX concept, to check user name and password are
 
 
 
+CREATE DATABASE user_db;
+USE user_db;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (username, password) VALUES
+('admin', '12345'),
+('user1', 'password1');
+
+
+
+//index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title>
+    <script>
+        function validateLogin() {
+            let user = document.getElementById("user").value;
+            let pass = document.getElementById("pass").value;
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "validate_login.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function () {
+                document.getElementById("result").innerHTML = this.responseText;
+            };
+            xhr.send("user=" + user + "&pass=" + pass);
+        }
+    </script>
+</head>
+<body>
+    <h3>Login</h3>
+    Username: <input type="text" id="user"><br>
+    Password: <input type="password" id="pass"><br>
+    <button onclick="validateLogin()">Login</button>
+    <div id="result"></div>
+</body>
+</html>
+
+
+
+
+//validate_login.php
+
+<?php
+$conn = new mysqli("localhost", "root", "", "user_db");
+
+$user = $_POST['user'];
+$pass = $_POST['pass'];
+
+$result = $conn->query("SELECT * FROM users WHERE username='$user' AND password='$pass'");
+
+echo ($result->num_rows > 0) ? "✅ Valid Login!" : "❌ Invalid Login!";
+$conn->close();
+?>
+
+
+
 
 
 Q. 2 ) Build a simple linear regression model for Car Dataset.
