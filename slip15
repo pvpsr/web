@@ -2,6 +2,42 @@ Q. 1) Write Ajax program to fetch suggestions when is user is typing in a textbo
       (eg like google suggestions. Hint create array of suggestions and matching string will be displayed) 
 
 
+//index.html
+
+<input type="text" onkeyup="showHint(this.value)">
+<div id="result"></div>
+
+<script>
+function showHint(str) {
+  if (str.length == 0) {
+    document.getElementById("result").innerHTML = "";
+    return;
+  }
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    document.getElementById("result").innerHTML = this.responseText;
+  }
+  xhttp.open("GET", "suggest.php?q=" + str, true);
+  xhttp.send();
+}
+</script>
+
+
+//suggest.php
+
+<?php
+$list = ["apple", "banana", "mango", "grapes", "orange"];
+$q = strtolower($_GET["q"]);
+$res = "";
+
+foreach ($list as $item) {
+  if (str_starts_with($item, $q)) {
+    $res .= $item . "<br>";
+  }
+}
+
+echo $res ?: "No match";
+?>
 
 
 
